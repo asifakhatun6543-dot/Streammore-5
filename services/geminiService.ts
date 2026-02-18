@@ -2,8 +2,17 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { Content } from "../types";
 
-// Initialized using the required named parameter and environment variable directly.
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Safe initialization
+const getAI = () => {
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) {
+    console.error("Gemini API Key is missing! Set API_KEY in environment variables.");
+    return null;
+  }
+  return new GoogleGenAI({ apiKey });
+};
+
+const ai = getAI();
 
 const getCache = (): Record<string, string[]> => {
   try {
@@ -50,7 +59,7 @@ export const getAIRecommendations = async (currentContent: Content, allContent: 
     if (filtered.length > 0) return filtered;
   }
 
-  if (isFetchingRecommendations) {
+  if (isFetchingRecommendations || !ai) {
     return allContent.filter(c => c.id !== currentContent.id).slice(0, 3);
   }
 
@@ -63,7 +72,6 @@ export const getAIRecommendations = async (currentContent: Content, allContent: 
     const prompt = `Based on "${currentContent.title}" (${currentContent.category}), pick 3 similar from this library: ${JSON.stringify(librarySummary)}. Return only a JSON array of the "i" values (IDs).`;
 
     const responseIds = await fetchWithRetry(async () => {
-      // Using gemini-3-flash-preview for basic text processing tasks.
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: prompt,
@@ -75,7 +83,6 @@ export const getAIRecommendations = async (currentContent: Content, allContent: 
           }
         }
       });
-      // response.text is a getter property.
       return JSON.parse(response.text || '[]');
     });
 
@@ -92,17 +99,16 @@ export const getAIRecommendations = async (currentContent: Content, allContent: 
 };
 
 export const chatWithAssistant = async (message: string, allContent: Content[]): Promise<string> => {
+  if (!ai) return "AI Assistant is currently offline. Please check API configuration.";
   try {
     const context = allContent.map(c => `- ${c.title} (${c.category})`).join('\n');
     const prompt = `You are "StreamBuddy", an AI assistant. Library:\n${context}\nUser: "${message}"\nRecommend titles from library. Friendly and concise.`;
     const response = await fetchWithRetry(async () => {
-      // Standard generateContent call using gemini-3-flash-preview.
       return await ai.models.generateContent({ 
         model: 'gemini-3-flash-preview', 
         contents: prompt 
       });
     });
-    // response.text property directly returns the extracted string.
     return response.text || "Check out our trending section!";
   } catch (error) {
     return "I'm having a little trouble connecting right now.";
