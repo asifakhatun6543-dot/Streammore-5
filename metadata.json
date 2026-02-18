@@ -1,0 +1,8 @@
+{
+  "name": "StreamMore",
+  "description": "A modern, premium video streaming application featuring a sleek user interface, AI-powered recommendations, and a comprehensive admin panel for content and advertisement management.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
