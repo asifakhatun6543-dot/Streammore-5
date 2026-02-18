@@ -17,7 +17,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- HLS.js for professional streaming support (Web ExoPlayer) -->
+  <!-- HLS.js for professional streaming support -->
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
   <style>
@@ -41,62 +41,29 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-
-    body.light-mode {
-      --bg-main: #f8fafc;
-      --bg-surface: #ffffff;
-      --text-main: #0f172a;
-      --text-muted: #475569;
-      --border-main: #e2e8f0;
-    }
-
-    body.light-mode {
-      background-color: var(--bg-main) !important;
-      color: var(--text-main) !important;
-    }
-
-    ::-webkit-scrollbar {
-      width: 4px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #334155;
-      border-radius: 10px;
-    }
-
-    .hero-gradient {
-      background: linear-gradient(to bottom, rgba(2, 2, 2, 0) 0%, rgba(2, 2, 2, 1) 100%);
-    }
-
-    .safe-padding-top {
-      padding-top: env(safe-area-inset-top);
-    }
-    .safe-padding-bottom {
-      padding-bottom: env(safe-area-inset-bottom);
-    }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
   </style>
-<script type="importmap">
-{
-  "imports": {
-    "@google/genai": "https://esm.sh/@google/genai@^1.38.0",
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "react": "https://esm.sh/react@^19.2.4",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "recharts": "https://esm.sh/recharts@^3.7.0",
-    "react-router-dom": "https://esm.sh/react-router-dom@^7.13.0"
+
+  <script type="importmap">
+  {
+    "imports": {
+      "@google/genai": "https://esm.sh/@google/genai@^1.38.0",
+      "react/": "https://esm.sh/react@^19.2.4/",
+      "react": "https://esm.sh/react@^19.2.4",
+      "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+      "recharts": "https://esm.sh/recharts@^3.7.0",
+      "react-router-dom": "https://esm.sh/react-router-dom@^7.13.0"
+    }
   }
-}
-</script>
+  </script>
+  
+  <!-- Yeh line zaroori hai code ko chalane ke liye -->
+  <script type="module" src="index.tsx"></script>
 </head>
 <body>
   <div id="root"></div>
