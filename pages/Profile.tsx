@@ -14,7 +14,6 @@ export const Profile: React.FC = () => {
   };
 
   // Filter content items that have saved playback progress
-  // If no progress, we show trending items as placeholders so the user can see the UI
   const continueWatchingItems = useMemo(() => {
     const realProgress = content
       .filter(item => playbackProgress[item.id] !== undefined && playbackProgress[item.id] > 0)
@@ -26,7 +25,7 @@ export const Profile: React.FC = () => {
 
     if (realProgress.length > 0) return realProgress;
 
-    // Placeholder data so the UI is visible even if no history exists
+    // Placeholder data
     return content.filter(c => c.isTrending).slice(0, 2).map(c => ({
       ...c,
       progress: 0,
@@ -118,6 +117,11 @@ export const Profile: React.FC = () => {
                    <i className="fa-solid fa-crown"></i> Premium
                  </span>
                )}
+               {user.isAdmin && (
+                 <span className="text-[9px] font-black uppercase tracking-widest px-3 py-1 bg-blue-600/20 border border-blue-500/30 rounded-lg text-blue-400 flex items-center gap-1.5">
+                   <i className="fa-solid fa-shield-halved"></i> Admin
+                 </span>
+               )}
             </div>
           </div>
 
@@ -127,7 +131,30 @@ export const Profile: React.FC = () => {
         </div>
       </div>
 
-      {/* CONTINUE WATCHING - WIDE & SHORT CARDS */}
+      {/* ADMIN SHORTCUT (Only for Admins) */}
+      {user.isAdmin && (
+        <section className="animate-in slide-in-from-top duration-700">
+          <div 
+            onClick={() => navigate('/admin')}
+            className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 rounded-[2rem] shadow-xl shadow-blue-900/20 cursor-pointer group relative overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform">
+               <i className="fa-solid fa-shield-halved text-8xl text-white -rotate-12"></i>
+            </div>
+            <div className="relative z-10 flex items-center justify-between">
+              <div className="space-y-1">
+                <h3 className="text-xl font-black text-white uppercase tracking-tight">Admin Dashboard</h3>
+                <p className="text-white/70 text-xs font-medium uppercase tracking-widest">Manage Content, Ads, and Support Tickets</p>
+              </div>
+              <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-white group-hover:bg-white/30 transition-all">
+                <i className="fa-solid fa-arrow-right"></i>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* CONTINUE WATCHING */}
       <section className="space-y-4 pt-2">
         <div className="flex items-center justify-between px-2">
           <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2">
@@ -151,7 +178,6 @@ export const Profile: React.FC = () => {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-70 group-hover:opacity-100"
                 />
                 
-                {/* Overlay Text */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-4 flex flex-col justify-end">
                    <h4 className="text-xs font-black text-white truncate mb-0.5">{item.title}</h4>
                    <p className="text-[8px] font-bold text-slate-400 uppercase tracking-tighter">
@@ -159,14 +185,12 @@ export const Profile: React.FC = () => {
                    </p>
                 </div>
 
-                {/* Play Button Overlay */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300">
                    <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center shadow-2xl scale-75 group-hover:scale-100 transition-transform">
                       <i className="fa-solid fa-play text-white text-xs ml-0.5"></i>
                    </div>
                 </div>
 
-                {/* Progress Bar (Always visible to show design) */}
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/10">
                    <div 
                       className="h-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]"
